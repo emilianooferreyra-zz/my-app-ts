@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import logo from './logo.svg'
 import './App.css'
 
@@ -25,13 +25,19 @@ function App() {
   }
 
   const completeTodo = (index: number): void => {
-    const newTodos: ITodo[] = todos
+    const newTodos: ITodo[] = [...todos]
     newTodos[index].complete = !newTodos[index].complete
     setTodo(newTodos)
   }
 
+  const removeTodo = (index: number): void => {
+    const newTodos: ITodo[] = [...todos]
+    newTodos.splice(index, 1)
+    setTodo(newTodos)
+  }
+
   return (
-    <>
+    <div style={{ textAlign: "center" }}>
       <img src={logo} className="App-logo" alt="logo" />
       <h1>Todo List</h1>
       <form onSubmit={handleSubmit}>
@@ -45,16 +51,17 @@ function App() {
       </form>
       <section>
         {todos.map((todo: ITodo, index: number) => (
-          <>
-            <div key={index}>{todo.text}</div>
+          <Fragment key={index}>
+            <div style={{ textDecoration: todo.complete ? 'line-through' : '' }}>{todo.text}</div>
             <button type="button" onClick={() => completeTodo(index)}>
               {' '}
               {todo.complete ? 'Incomplete' : 'Complete'}{' '}
             </button>
-          </>
+            <button type="button" onClick={() => removeTodo(index)}>&times;</button>
+          </Fragment>
         ))}
       </section>
-    </>
+    </div>
   )
 }
 
